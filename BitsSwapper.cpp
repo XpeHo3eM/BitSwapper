@@ -4,11 +4,14 @@
 #include <cstdint>
 #include <ctime>
 #include <iomanip>
-
+#include <cassert>
 
 
 template<class T>
-void bitSwapper(T begin, size_t byteLength) {
+void bitSwapper(T* begin, size_t byteLength) {
+	assert(begin != nullptr);
+	assert(byteLength > 0);
+
 	for (size_t i = 0; i < byteLength; ++i) {
 		const auto mask = rand();
 		auto& number    = *(reinterpret_cast<uint8_t*>(begin) + i);
@@ -27,7 +30,7 @@ void bitSwapper(T begin, size_t byteLength) {
 
 
 template<class T>
-void print(T arr, size_t size) {
+void print(const T& arr, const size_t size) {
 	bool uint8t = std::is_same<T, uint8_t*>::value;
 
 	for (size_t i = 0; i < size; ++i) {
@@ -38,7 +41,7 @@ void print(T arr, size_t size) {
 
 int main() {
 	srand(time(0));
-	
+
 	std::array<uint16_t, 10> arr;
 	
 	for (auto& el : arr) {
@@ -54,8 +57,8 @@ int main() {
 		<< std::left << std::setw(10) << "Mask" 
 		<< std::left << std::setw(10) << "Swapped" 
 		<< std::endl;
-	bitSwapper(arr.data(), 7);
+	bitSwapper(&arr, arr.size());
 
 	std::cout << "\n\nAfter swapper: " << std::endl;
-	print(arr.data(), arr.size());
+	print(arr, arr.size());
 }
